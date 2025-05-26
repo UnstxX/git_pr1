@@ -9,10 +9,14 @@ from rich.syntax import Syntax
 
 console = Console()
 
+
+# Вывод содержимого директории
 def list_dir(path='.'):
     for name in os.listdir(path):
         print(name)
 
+
+# Копирование из одного места в другое
 def copy(src, dst):
     try:
         if os.path.isdir(src):
@@ -23,6 +27,8 @@ def copy(src, dst):
     except Exception as e:
         print(f"[red]Error copying:[/red] {e}")
 
+
+# Перемещение из одного места в другое
 def move(src, dst):
     try:
         shutil.move(src, dst)
@@ -30,6 +36,8 @@ def move(src, dst):
     except Exception as e:
         print(f"[red]Error moving:[/red] {e}")
 
+
+# Удаление
 def remove(path):
     try:
         if os.path.isdir(path):
@@ -40,6 +48,8 @@ def remove(path):
     except Exception as e:
         print(f"[red]Error removing:[/red] {e}")
 
+
+# Переименование
 def rename(src, dst):
     """Переименовать файл или директорию."""
     try:
@@ -48,6 +58,8 @@ def rename(src, dst):
     except Exception as e:
         print(f"[red]Error renaming:[/red] {e}")
 
+
+# Поиск
 def search(name_pattern, path='.'):
     """Рекурсивный поиск файлов/папок по подстроке в имени."""
     for root, dirs, files in os.walk(path):
@@ -55,6 +67,8 @@ def search(name_pattern, path='.'):
             if name_pattern.lower() in entry.lower():
                 print(os.path.join(root, entry))
 
+
+# Просмотр в текстовом редакторе
 def view_file(path):
     """Вывод содержимого текстового файла с подсветкой синтаксиса."""
     if not os.path.isfile(path):
@@ -67,17 +81,20 @@ def view_file(path):
     except Exception as e:
         print(f"[red]Error reading file:[/red] {e}")
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="Python File Manager v1.3"
     )
     parser.add_argument(
         'command',
-        choices=['ls','cp','mv','rm','mkdir','search','view','rename'],
+        choices=['ls', 'cp', 'mv', 'rm', 'mkdir', 'search', 'view', 'rename'],
         help="Доступные команды: ls, cp, mv, rm, mkdir, search, view, rename"
     )
     parser.add_argument('src', nargs='?', default='.', help="Источник (файл/папка/шаблон)")
-    parser.add_argument('dst', nargs='?', help="Назначение (для команд cp, mv, rename и базового пути для search)")
+    parser.add_argument('dst', nargs='?', help="""
+                        Назначение (для команд cp, mv, rename и базового пути для search)
+                        """)
     args = parser.parse_args()
 
     cmd = args.command
@@ -104,6 +121,7 @@ def main():
         view_file(src)
     else:
         print("[red]Unknown usage or missing arguments[/red]")
+
 
 if __name__ == '__main__':
     main()
